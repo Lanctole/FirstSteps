@@ -1,8 +1,9 @@
 package org.example.utils;
 
 import lombok.NonNull;
+import org.example.types.ValueType;
 
-public final class TypeSpecifier {
+public final class TypeDetector {
     public static boolean isInteger(@NonNull String input) {
         try {
             Long.parseLong(input.trim());
@@ -21,10 +22,10 @@ public final class TypeSpecifier {
         }
     }
 
-    public static String getType(@NonNull String input) {
-        if (TypeSpecifier.isInteger(input)) return "integer";
-        else if (TypeSpecifier.isFloat(input)) return "float";
-        else return "string";
+    public static ValueType getType(@NonNull String input) {
+        if (isInteger(input)) return ValueType.INTEGER;
+        else if (isFloat(input)) return ValueType.FLOAT;
+        else return ValueType.STRING;
     }
 
 }

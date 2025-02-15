@@ -21,10 +21,18 @@ public class FileWriterService {
         this.appendMode = appendMode;
     }
 
-    public void writeToFile(String type, String line) throws IOException {
-        BufferedWriter writer = writers.computeIfAbsent(type, this::openWriter);
-        writer.write(line);
-        writer.newLine();
+    public void writeToFile(String type, String line) {
+        try {
+            BufferedWriter writer = writers.computeIfAbsent(type, this::openWriter);
+            if (writer != null) {
+                writer.write(line);
+                writer.newLine();
+            } else {
+                System.out.println("Ошибка записи в файл: не удалось открыть writer для типа " + type);
+            }
+        } catch (IOException e) {
+            System.out.println("Ошибка при записи в файл: " + e);
+        }
     }
 
     private BufferedWriter openWriter(String type) {

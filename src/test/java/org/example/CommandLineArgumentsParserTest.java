@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.utils.InputParser;
+import org.example.utils.CommandLineArgumentsParser;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -8,49 +8,49 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class InputParserTest {
+class CommandLineArgumentsParserTest {
 
     @Test
     void testFlagsParsing() {
         String[] args = {"-s", "-f", "-a"};
-        InputParser parser = new InputParser(args);
+        CommandLineArgumentsParser parser = new CommandLineArgumentsParser(args);
         assertTrue(parser.isShortStatistic());
         assertTrue(parser.isFullStatistic());
-        assertTrue(parser.isAppend());
+        assertTrue(parser.isAppendToExistingFile());
     }
 
     @Test
     void testValidOutputPath() {
         String[] args = {"-o", "valid/path"};
-        InputParser parser = new InputParser(args);
+        CommandLineArgumentsParser parser = new CommandLineArgumentsParser(args);
         assertEquals("valid/path", parser.getOutputPath());
     }
 
     @Test
     void testInvalidOutputPath() {
         String[] args = {"-o", "*&path"};
-        InputParser parser = new InputParser(args);
+        CommandLineArgumentsParser parser = new CommandLineArgumentsParser(args);
         assertEquals(".", parser.getOutputPath());
     }
 
     @Test
     void testValidPrefix() {
         String[] args = {"-p", "output"};
-        InputParser parser = new InputParser(args);
+        CommandLineArgumentsParser parser = new CommandLineArgumentsParser(args);
         assertEquals("output", parser.getPrefix());
     }
 
     @Test
     void testInvalidPrefix() {
         String[] args = {"-p", "*@prefix!"};
-        InputParser parser = new InputParser(args);
+        CommandLineArgumentsParser parser = new CommandLineArgumentsParser(args);
         assertEquals("", parser.getPrefix());
     }
 
     @Test
     void testFileNames() {
         String[] args = {"file1.txt", "file2.log", "-s", "-o", "output"};
-        InputParser parser = new InputParser(args);
+        CommandLineArgumentsParser parser = new CommandLineArgumentsParser(args);
         List<String> fileNames = parser.getFileNames();
         assertEquals(2, fileNames.size());
         assertTrue(fileNames.contains("file1.txt"));
@@ -60,7 +60,7 @@ class InputParserTest {
     @Test
     void testIncorrectFlagUsage() {
         String[] args = {"-o"};
-        InputParser parser = new InputParser(args);
+        CommandLineArgumentsParser parser = new CommandLineArgumentsParser(args);
         assertEquals(".", parser.getOutputPath());
     }
 }

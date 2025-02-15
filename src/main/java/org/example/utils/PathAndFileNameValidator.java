@@ -16,7 +16,10 @@ public class PathAndFileNameValidator {
         }
     }
 
-    public static boolean isValidFileName(String prefix) {
-        return prefix.matches("^[a-zA-Z0-9_-]+$");
+    public static boolean isValidFileName(String fileName) {
+        if (fileName.matches(".*[<>:\"/\\\\|?*].*")) {
+            return false;
+        }
+        return fileName.length() <= 255;
     }
 }

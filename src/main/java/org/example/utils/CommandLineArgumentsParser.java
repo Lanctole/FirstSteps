@@ -6,18 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class InputParser {
+public class CommandLineArgumentsParser {
     private String outputPath = ".";
     private String prefix = "";
-    private boolean isAppend, isShortStatistic, isFullStatistic;
+    private boolean appendToExistingFile, isShortStatistic, isFullStatistic;
     private List<String> fileNames = new ArrayList<>();
 
-    public InputParser(String[] args) {
+    public CommandLineArgumentsParser(String[] args) {
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-s" -> isShortStatistic = true;
                 case "-f" -> isFullStatistic = true;
-                case "-a" -> isAppend = true;
+                case "-a" -> appendToExistingFile = true;
                 case "-o", "-p" -> i = parseKeyValueArgument(args, i);
                 default -> fileNames.add(args[i]);
             }

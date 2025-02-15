@@ -1,6 +1,7 @@
 package org.example.services;
 
-import org.example.utils.TypeSpecifier;
+import org.example.types.ValueType;
+import org.example.utils.TypeDetector;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,25 +38,25 @@ public class FileProcessor {
                 processLine(line);
             }
         } catch (IOException e) {
-            System.out.println("Ошибка чтения файла " + fileName + ": " + e.getMessage());
+            System.out.println("Ошибка чтения файла: " + e.getMessage());
         }
     }
 
     private void processLine(String line) throws IOException {
-        String type = TypeSpecifier.getType(line);
+        ValueType type = TypeDetector.getType(line);
         if (isNeedStatistic) {
             processStatistic(type, line);
         }
-        fileWriterService.writeToFile(type, line);
+        fileWriterService.writeToFile(type.name().toLowerCase(), line);
     }
 
-    private void processStatistic(String type, String line) {
-        if (type.equals("integer")) {
-            statisticService.addValueToStatistic("integer", Long.parseLong(line.trim()), isFullStatistic);
-        } else if (type.equals("float")) {
-            statisticService.addValueToStatistic("float", Double.parseDouble(line.trim()), isFullStatistic);
-        } else {
-            statisticService.addValueToStatistic("string", line, isFullStatistic);
+    private void processStatistic(ValueType type, String line) {
+        switch (type) {
+            case INTEGER ->
+                    statisticService.addValueToStatistic(ValueType.INTEGER, Long.parseLong(line.trim()), isFullStatistic);
+            case FLOAT ->
+                    statisticService.addValueToStatistic(ValueType.FLOAT, Double.parseDouble(line.trim()), isFullStatistic);
+            case STRING -> statisticService.addValueToStatistic(ValueType.STRING, line, isFullStatistic);
         }
     }
 }
